@@ -1,35 +1,292 @@
-{
-  "case_id":"56763bf7-d046-4a54-a4a1-0728c724a092",
-  "clients":[
-     {
-        "client_id":"be23f463-0eb9-47b6-9caf-98e9a0865b6d",
-        "details":{
-           "first_name":"Joe",
-           "last_name":"Bloggs",
-           "address":{
-              "address1":"1 High Street",
-              "posttown":"Nottingham",
-              "postcode":"E1 7ee"
-           },
-           "dob":"1990/08/11",
-           "dependents":2,
-           "employment_status":"EMPLOYED"
+[
+  {
+    "case_id": "56763bf7-d046-4a54-a4a1-0728c724a092",
+    "clients": [
+      {
+        "client_id": "be23f463-0eb9-47b6-9caf-98e9a0865b6d",
+        "details": {
+          "first_name": "Joe",
+          "last_name": "Bloggs",
+          "address": {
+            "address1": "1 High Street",
+            "posttown": "Nottingham",
+            "postcode": "E1 7ee"
+          },
+          "dob": "1990/08/11",
+          "dependents": 2,
+          "employment_status": "EMPLOYED"
         }
-     },
-     {
-        "client_id":"be23f463-0eb9-47b6-9caf-98e9a0865b6d",
-        "details":{
-           "first_name":"Jane",
-           "last_name":"Bloggs",
-           "address":{
-              "address1":"1 High Street",
-              "posttown":"Nottingham",
-              "postcode":"E1 7ee"
-           },
-           "dob":"1992/05/12",
-           "dependents":2,
-           "employment_status":"EMPLOYED"
+      },
+      {
+        "client_id": "be23f463-0eb9-47b6-9caf-98e9a0865b6d",
+        "details": {
+          "first_name": "Jane",
+          "last_name": "Bloggs",
+          "address": {
+            "address1": "1 High Street",
+            "posttown": "Nottingham",
+            "postcode": "E1 7ee"
+          },
+          "dob": "1992/05/12",
+          "dependents": 2,
+          "employment_status": "EMPLOYED"
         }
-     }
-  ]
-}
+      }
+    ]
+  },
+  {
+    "case_id": "0ed90475-9531-485d-9d9d-c9f81818e811",
+    "clients": [
+      {
+        "client_id": "099950d8-36f6-45cc-81e7-4ef5e8e25d94",
+        "details": {
+          "first_name": "Callum",
+          "last_name": "Wilson",
+          "address": {
+            "address1": "42 Church Lane",
+            "posttown": "Nottingham",
+            "postcode": "NG1 5FS"
+          },
+          "dob": "1965/07/14",
+          "dependents": 0,
+          "employment_status": "SELF_EMPLOYED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "a170b338-3926-4059-b28c-105d1fb17c23",
+    "clients": [
+      {
+        "client_id": "0fd630f1-f29d-4da9-953f-48f1a09f76b5",
+        "details": {
+          "first_name": "Hannah",
+          "last_name": "Thomas",
+          "address": {
+            "address1": "31 Station Road",
+            "posttown": "Manchester",
+            "postcode": "M1 1AE"
+          },
+          "dob": "1996/10/13",
+          "dependents": 3,
+          "employment_status": "EMPLOYED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "4ef8aa38-9227-4658-9e27-a1c08a6a63ec",
+    "clients": [
+      {
+        "client_id": "2e44158b-ae97-4a94-90ed-a82f8f6d0558",
+        "details": {
+          "first_name": "Noah",
+          "last_name": "Thomas",
+          "address": {
+            "address1": "29 High Street",
+            "posttown": "Birmingham",
+            "postcode": "B1 1AA"
+          },
+          "dob": "1966/10/19",
+          "dependents": 1,
+          "employment_status": "SELF_EMPLOYED"
+        }
+      },
+      {
+        "client_id": "b64ce422-8c38-4b29-98f1-35d25f557203",
+        "details": {
+          "first_name": "Priya",
+          "last_name": "Thomas",
+          "address": {
+            "address1": "29 High Street",
+            "posttown": "Birmingham",
+            "postcode": "B1 1AA"
+          },
+          "dob": "1964/10/02",
+          "dependents": 1,
+          "employment_status": "SELF_EMPLOYED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "cb5c7427-3f98-4277-8cbd-87ad5c90a958",
+    "clients": [
+      {
+        "client_id": "3e7d1bfb-c7a2-4a20-b2f1-4c942e05319a",
+        "details": {
+          "first_name": "Hannah",
+          "last_name": "Wilson",
+          "address": {
+            "address1": "64 Green Lane",
+            "posttown": "Leeds",
+            "postcode": "LS1 1UR"
+          },
+          "dob": "1965/10/10",
+          "dependents": 2,
+          "employment_status": "UNEMPLOYED"
+        }
+      },
+      {
+        "client_id": "72e6cc3a-babc-4d20-97ee-05cde00902c7",
+        "details": {
+          "first_name": "Isla",
+          "last_name": "Wilson",
+          "address": {
+            "address1": "64 Green Lane",
+            "posttown": "Leeds",
+            "postcode": "LS1 1UR"
+          },
+          "dob": "1978/10/03",
+          "dependents": 2,
+          "employment_status": "SELF_EMPLOYED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "ab1031d0-f646-41f4-8a09-7c976bf46c69",
+    "clients": [
+      {
+        "client_id": "92b1d3f2-8ede-4d7a-83ba-ea9e13deef86",
+        "details": {
+          "first_name": "Arjun",
+          "last_name": "Patel",
+          "address": {
+            "address1": "66 King Street",
+            "posttown": "Bristol",
+            "postcode": "BS1 4DJ"
+          },
+          "dob": "1980/06/23",
+          "dependents": 2,
+          "employment_status": "SELF_EMPLOYED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "b2715945-795e-4229-851a-bd81f1d69ed6",
+    "clients": [
+      {
+        "client_id": "bb2d420f-0f88-480b-90a3-d6b2aa05e11a",
+        "details": {
+          "first_name": "Amelia",
+          "last_name": "Roberts",
+          "address": {
+            "address1": "77 Orchard Close",
+            "posttown": "Newcastle",
+            "postcode": "NE1 4ST"
+          },
+          "dob": "1979/11/19",
+          "dependents": 3,
+          "employment_status": "UNEMPLOYED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "0f17a300-7e62-4a0a-9df9-fd789c653938",
+    "clients": [
+      {
+        "client_id": "211c70cf-4995-4399-84aa-eac137dc76fb",
+        "details": {
+          "first_name": "George",
+          "last_name": "Brown",
+          "address": {
+            "address1": "37 King Street",
+            "posttown": "Cambridge",
+            "postcode": "CB2 1TN"
+          },
+          "dob": "1975/07/13",
+          "dependents": 0,
+          "employment_status": "UNEMPLOYED"
+        }
+      },
+      {
+        "client_id": "66d22876-72fd-4202-aa96-fb1a14a0f9e7",
+        "details": {
+          "first_name": "Mohammed",
+          "last_name": "Brown",
+          "address": {
+            "address1": "37 King Street",
+            "posttown": "Cambridge",
+            "postcode": "CB2 1TN"
+          },
+          "dob": "1995/05/05",
+          "dependents": 0,
+          "employment_status": "RETIRED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "26bb7dbd-2d1c-4af0-953e-7c2a26a2c0bd",
+    "clients": [
+      {
+        "client_id": "0316909e-3bbb-49ea-a894-8c893b618676",
+        "details": {
+          "first_name": "Emma",
+          "last_name": "Taylor",
+          "address": {
+            "address1": "111 Green Lane",
+            "posttown": "Southampton",
+            "postcode": "SO14 7FP"
+          },
+          "dob": "1991/10/06",
+          "dependents": 3,
+          "employment_status": "EMPLOYED"
+        }
+      },
+      {
+        "client_id": "6b4013ef-254b-4c4e-810c-4759482c9cbc",
+        "details": {
+          "first_name": "Liam",
+          "last_name": "Taylor",
+          "address": {
+            "address1": "111 Green Lane",
+            "posttown": "Southampton",
+            "postcode": "SO14 7FP"
+          },
+          "dob": "1994/06/20",
+          "dependents": 3,
+          "employment_status": "SELF_EMPLOYED"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "1a81682c-64e5-4cad-a623-7a0465e7e423",
+    "clients": [
+      {
+        "client_id": "0fef7928-6683-4886-a260-cd0b7b45145c",
+        "details": {
+          "first_name": "Callum",
+          "last_name": "Roberts",
+          "address": {
+            "address1": "17 Green Lane",
+            "posttown": "London",
+            "postcode": "SW1A 1AA"
+          },
+          "dob": "1972/02/07",
+          "dependents": 0,
+          "employment_status": "UNEMPLOYED"
+        }
+      },
+      {
+        "client_id": "99c94309-570d-4195-9c24-42f9298cb3a5",
+        "details": {
+          "first_name": "Emma",
+          "last_name": "Roberts",
+          "address": {
+            "address1": "17 Green Lane",
+            "posttown": "London",
+            "postcode": "SW1A 1AA"
+          },
+          "dob": "1963/02/01",
+          "dependents": 0,
+          "employment_status": "EMPLOYED"
+        }
+      }
+    ]
+  }
+]

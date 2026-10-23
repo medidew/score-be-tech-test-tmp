@@ -4,11 +4,12 @@ Barebones React application using Vite, JavaScript, and React Router.
 
 `src/App.js` defines the routes and shared header and footer:
 
-- `/` — landing page placeholder for case cards.
+- `/` — case list with links to case details.
 - `/cases/:caseId` — case details with estimated weekly outgoings.
 - Unmatched paths — page not found.
 
-Case cards and other case details are not implemented yet.
+The landing page preserves the case list from the shared branch. Case cards
+and other case details are not implemented yet.
 Production hosting must serve `index.html` for frontend routes so direct links
 to case details work.
 
@@ -33,7 +34,7 @@ Vite proxies `/api/*` to `http://127.0.0.1:8000/*` during development.
 when the case changes or the component unmounts. Amounts remain in GBP/week;
 missing estimates are displayed as unavailable, not zero.
 
-The backend currently supports only the supplied sample case. To view it, open
+The backend reads cases from the supplied fixture. To view the original sample, open
 `/cases/56763bf7-d046-4a54-a4a1-0728c724a092` on the Vite server.
 
 ## Production build
