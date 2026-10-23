@@ -1,5 +1,8 @@
 import http.client
 import json
+import ssl
+
+import certifi
 
 # when postcode empty
 # when postcode invalid
@@ -14,7 +17,10 @@ def postcode_to_region(postcode):
     
     if not postcode.strip():
         raise ValueError("Postcode cannot be empty")
-    conn = http.client.HTTPSConnection("api.postcodes.io", timeout=5)
+    # Supplement system certificates for Python installations without a CA bundle.
+    context = ssl.create_default_context()
+    context.load_verify_locations(cafile=certifi.where())
+    conn = http.client.HTTPSConnection("api.postcodes.io", timeout=5, context=context)
     body = ""
     headers = {
         "Accept": "application/json"
