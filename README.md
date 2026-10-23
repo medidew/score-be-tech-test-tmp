@@ -39,6 +39,13 @@ A successful response is a JSON object containing the mapped outgoings_... field
 
 outgoings_additional_details intentionally retains the explanatory notes from the category mapping, and adds relevant warnings for unavailable components, low-sample values and unrecognised source values. Partial estimates sum only usable components and are explicitly flagged; they are not complete household totals.
 
+GET /cases/{case_id}/clients
+
+Returns the case's client details in the same JSON structure as case.json (case_id plus the clients list):
+curl -i "http://127.0.0.1:8000/cases/56763bf7-d046-4a54-a4a1-0728c724a092/clients"
+
+Returns 404 when the Case ID does not match the supplied fixture.
+
 HTTP status	Meaning
 200	Case found and estimates calculated
 404	Case ID does not match the supplied fixture
