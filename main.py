@@ -23,6 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent
 CASE_FILE = BASE_DIR / "case.json"
 ONS_FILE = BASE_DIR / "ONSByRegion2019.xlsx"
 
+# Postcodes.io and this ONS workbook use different labels for these regions.
+ONS_REGION_ALIASES = {
+    "East of England": "East",
+    "Yorkshire and The Humber": "Yorkshire and the Humber",
+}
+
 
 # Prepare the ONS dataset once, not for every API request.
 needed_codes = {
@@ -127,6 +133,7 @@ def get_outgoings(case_id: str):
         ) from exc
 
     # 3. Check whether ONS covers the region
+    region = ONS_REGION_ALIASES.get(region, region)
     if region not in clean_df.columns:
         raise HTTPException(
             status_code=422,
