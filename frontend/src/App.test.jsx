@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
 import App from './App.js';
 
@@ -78,4 +78,22 @@ it('shows an empty state when no cases exist', async () => {
   mockApi({ empty: true });
   render(<App />);
   expect(await screen.findByText('No cases available.')).toBeTruthy();
+});
+
+it('sorts outgoing amounts in both directions with zero included and missing estimates last', async () => {
+  window.history.replaceState({}, '', '/cases/case-123');
+  mockApi();
+  render(<App />);
+  await screen.findByText('£42.50');
+  const table = screen.getByRole('table', { name: 'Estimated weekly outgoings' });
+  const amounts = () => within(table).getAllByRole('row').slice(1)
+    .map((row) => within(row).getByRole('cell').textContent);
+
+  expect(amounts()).toEqual(['£0.00', '£42.50', 'Not available']);
+  expect(within(table).getByRole('columnheader', { name: /Weekly estimate/ }).getAttribute('aria-sort')).toBe('ascending');
+  fireEvent.click(screen.getByRole('button', { name: 'Sort weekly estimates highest first' }));
+  expect(amounts()).toEqual(['£42.50', '£0.00', 'Not available']);
+  expect(within(table).getByRole('columnheader', { name: /Weekly estimate/ }).getAttribute('aria-sort')).toBe('descending');
+  fireEvent.click(screen.getByRole('button', { name: 'Sort weekly estimates lowest first' }));
+  expect(amounts()).toEqual(['£0.00', '£42.50', 'Not available']);
 });

@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   Alert, Box, Button,
   CircularProgress, Paper, Stack, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Tooltip, Typography,
+  TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, Typography,
 } from '@mui/material';
 import ClientDetails from '../components/ClientDetails.jsx';
 import useCase from '../hooks/useCase.js';
@@ -15,7 +16,17 @@ export default function CaseDetails() {
   const { caseId } = useParams();
   const caseResult = useCase(caseId);
   const { data: outgoings, loading, error } = useOutgoings(caseId);
+  const [amountOrder, setAmountOrder] = useState('asc');
   const notes = outgoingsDetails(outgoings?.outgoings_additional_details);
+  const outgoingRows = Object.entries(outgoings ?? {})
+    .filter(([key]) => key.startsWith('outgoings_') && key !== 'outgoings_additional_details')
+    .sort(([, first], [, second]) => {
+      const firstAvailable = typeof first === 'number' && Number.isFinite(first);
+      const secondAvailable = typeof second === 'number' && Number.isFinite(second);
+      if (!firstAvailable) return secondAvailable ? 1 : 0;
+      if (!secondAvailable) return -1;
+      return amountOrder === 'asc' ? first - second : second - first;
+    });
 
   return (
     <Stack spacing={3}>
@@ -47,13 +58,20 @@ export default function CaseDetails() {
                 <TableHead>
                   <TableRow>
                     <TableCell>Category</TableCell>
-                    <TableCell align="right">Weekly estimate (GBP)</TableCell>
+                    <TableCell align="right" sortDirection={amountOrder}>
+                      <TableSortLabel
+                        active
+                        direction={amountOrder}
+                        onClick={() => setAmountOrder((order) => order === 'asc' ? 'desc' : 'asc')}
+                        aria-label={`Sort weekly estimates ${amountOrder === 'asc' ? 'highest first' : 'lowest first'}`}
+                      >
+                        Weekly estimate (GBP)
+                      </TableSortLabel>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.entries(outgoings)
-                    .filter(([key]) => key.startsWith('outgoings_') && key !== 'outgoings_additional_details')
-                    .map(([key, amount]) => (
+                  {outgoingRows.map(([key, amount]) => (
                       <TableRow key={key}>
                         <TableCell component="th" scope="row">
                           <Tooltip
