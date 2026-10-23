@@ -63,6 +63,23 @@ def get_case_region(case):
     return regions.pop()
 
 
+@app.get("/cases/{case_id}/clients")
+def get_clients(case_id: str):
+    case = get_case(CASE_FILE, case_id)
+
+    if case is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Case not found"
+        )
+
+    # Same structure as case.json: the case ID and its list of clients
+    return {
+        "case_id": case["case_id"],
+        "clients": case.get("clients", []),
+    }
+
+
 @app.get("/cases/{case_id}/outgoings")
 def get_outgoings(case_id: str):
     # 1. Retrieve the case

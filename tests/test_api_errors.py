@@ -83,3 +83,18 @@ def test_repeated_postcode_needs_only_one_lookup(api, monkeypatch):
     }
     assert main.get_case_region(case) == "East Midlands"
     assert requests == ["NG1 2ET"]
+
+def test_clients_returns_case_clients(api):
+    _, client = api
+    response = client.get(f"/cases/{SAMPLE_ID}/clients")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["case_id"] == SAMPLE_ID
+    assert len(data["clients"]) == 2
+
+
+def test_clients_unknown_case_returns_404(api, monkeypatch):
+    main, client = api
+    monkeypatch.setattr(main, "get_case", lambda *args: None)
+    response = client.get(f"/cases/{SAMPLE_ID}/clients")
+    assert response.status_code == 404
