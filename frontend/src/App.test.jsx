@@ -25,7 +25,7 @@ function mockApi({ outgoingsError = false, empty = false } = {}) {
         ok: true,
         json: async () => ({
           outgoings_food: 42.5, outgoings_clothing: 0, outgoings_child_care: null,
-          outgoings_additional_details: 'Regional estimate only.',
+          outgoings_additional_details: 'outgoings_food: Excludes alcoholic drinks.\noutgoings_food: Low-sample estimate.\noutgoings_child_care: No standalone childcare category.',
         }),
       };
     }
@@ -56,8 +56,12 @@ it('opens complete case details and outgoings from a case card', async () => {
   expect(screen.getByText('1990/08/11')).toBeTruthy();
   expect(screen.getByRole('heading', { name: 'Test Applicant' })).toBeTruthy();
   expect(screen.getByRole('link', { name: 'Score' })).toBeTruthy();
-  fireEvent.click(screen.getByRole('button', { name: 'Assumptions and data limitations' }));
-  expect(await screen.findByText('Regional estimate only.')).toBeTruthy();
+  fireEvent.mouseOver(screen.getByText('food').parentElement);
+  const tooltip = await screen.findByRole('tooltip');
+  expect(tooltip.textContent).toContain('Excludes alcoholic drinks.');
+  expect(tooltip.textContent).toContain('Low-sample estimate.');
+  expect(tooltip.textContent).not.toContain('No standalone childcare category.');
+  expect(screen.queryByText('Assumptions and data limitations')).toBeNull();
 });
 
 it('loads a direct case URL and keeps applicant details visible when outgoings fail', async () => {

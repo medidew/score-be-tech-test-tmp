@@ -1,12 +1,13 @@
 import { Link, useParams } from 'react-router-dom';
 import {
-  Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button,
+  Alert, Box, Button,
   CircularProgress, Paper, Stack, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Typography,
+  TableContainer, TableHead, TableRow, Tooltip, Typography,
 } from '@mui/material';
 import ClientDetails from '../components/ClientDetails.jsx';
 import useCase from '../hooks/useCase.js';
 import useOutgoings from '../hooks/useOutgoings.js';
+import outgoingsDetails from '../utils/outgoingsDetails.js';
 
 const currency = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
 
@@ -14,6 +15,7 @@ export default function CaseDetails() {
   const { caseId } = useParams();
   const caseResult = useCase(caseId);
   const { data: outgoings, loading, error } = useOutgoings(caseId);
+  const notes = outgoingsDetails(outgoings?.outgoings_additional_details);
 
   return (
     <Stack spacing={3}>
@@ -53,8 +55,19 @@ export default function CaseDetails() {
                     .filter(([key]) => key.startsWith('outgoings_') && key !== 'outgoings_additional_details')
                     .map(([key, amount]) => (
                       <TableRow key={key}>
-                        <TableCell component="th" scope="row" sx={{ textTransform: 'capitalize' }}>
-                          {key.replace(/^outgoings_/, '').replaceAll('_', ' ')}
+                        <TableCell component="th" scope="row">
+                          <Tooltip
+                            title={<Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>{notes[key] || 'No additional details provided for this category.'}</Typography>}
+                            describeChild
+                            arrow
+                            enterTouchDelay={0}
+                            leaveTouchDelay={4000}
+                          >
+                            <Box component="span" tabIndex={0} sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, cursor: 'help' }}>
+                              <Box component="span" sx={{ textTransform: 'capitalize' }}>{key.replace(/^outgoings_/, '').replaceAll('_', ' ')}</Box>
+                              <Box component="span" aria-hidden="true" sx={{ color: 'text.secondary' }}>ⓘ</Box>
+                            </Box>
+                          </Tooltip>
                         </TableCell>
                         <TableCell align="right">{amount === null ? 'Not available' : currency.format(amount)}</TableCell>
                       </TableRow>
@@ -62,16 +75,6 @@ export default function CaseDetails() {
                 </TableBody>
               </Table>
             </TableContainer>
-            {outgoings.outgoings_additional_details && (
-              <Accordion variant="outlined" disableGutters elevation={0}>
-                <AccordionSummary expandIcon={<span aria-hidden="true">⌄</span>} aria-controls="outgoings-notes" id="outgoings-notes-heading">
-                  <Typography>Assumptions and data limitations</Typography>
-                </AccordionSummary>
-                <AccordionDetails id="outgoings-notes">
-                  <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>{outgoings.outgoings_additional_details}</Typography>
-                </AccordionDetails>
-              </Accordion>
-            )}
           </Stack>
         )}
       </Box>
