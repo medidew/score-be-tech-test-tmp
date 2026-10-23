@@ -21,10 +21,10 @@ beforeEach(() => {
 afterEach(cleanup);
 
 it.each([
-  ['  jAnE  ', ['one', 'two']],
+  ['  jAnE  ', ['two', 'one']],
   ['jane   SMITH', ['one']],
   ['ogg', ['one']],
-  ['  ', ['one', 'two', 'three', 'four']],
+  ['  ', ['three', 'two', 'one', 'four']],
 ])('shows every matching case for query %s', (query, expectedIds) => {
   render(<MemoryRouter><LandingPage /></MemoryRouter>);
   fireEvent.change(screen.getByRole('searchbox', { name: 'Search by client name' }), { target: { value: query } });
@@ -43,4 +43,20 @@ it('shows no matches and restores every case when the search is cleared', () => 
   fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
   expect(screen.getAllByRole('link')).toHaveLength(4);
   expect(screen.queryByText('No cases match your search.')).toBeNull();
+});
+
+it('switches between ascending and descending name order while keeping search results filtered', () => {
+  render(<MemoryRouter><LandingPage /></MemoryRouter>);
+  const cardPaths = () => screen.getAllByRole('link').map((card) => card.getAttribute('href'));
+  expect(cardPaths()).toEqual(['/cases/three', '/cases/two', '/cases/one', '/cases/four']);
+
+  const sort = screen.getByRole('combobox', { name: 'Sort by client name' });
+  fireEvent.change(sort, { target: { value: 'desc' } });
+  expect(cardPaths()).toEqual(['/cases/four', '/cases/one', '/cases/two', '/cases/three']);
+
+  fireEvent.change(screen.getByRole('searchbox', { name: 'Search by client name' }), { target: { value: 'Jane' } });
+  expect(cardPaths()).toEqual(['/cases/one', '/cases/two']);
+  fireEvent.change(sort, { target: { value: 'asc' } });
+  expect(cardPaths()).toEqual(['/cases/two', '/cases/one']);
+  expect(cases.map((caseData) => caseData.case_id)).toEqual(['one', 'two', 'three', 'four']);
 });
