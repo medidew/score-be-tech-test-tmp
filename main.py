@@ -1,7 +1,9 @@
 
+import json
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from read_case import get_case
 from postcodes import postcode_to_region
@@ -9,6 +11,13 @@ from read_ons import (OUTGOINGS_MAPPING, clean_regional_data, calc_outgoings,)
 
 
 app = FastAPI(title="Mortgage Affordability API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
+)
 
 BASE_DIR = Path(__file__).resolve().parent
 CASE_FILE = BASE_DIR / "case.json"
@@ -61,6 +70,22 @@ def get_case_region(case):
             raise ValueError("Clients belong to different regions")
 
     return regions.pop()
+
+
+@app.get("/cases")
+def list_cases():
+    with open(CASE_FILE) as file:
+        return json.load(file)
+
+
+@app.get("/cases/{case_id}")
+def get_case_by_id(case_id: str):
+    case = get_case(CASE_FILE, case_id)
+
+    if case is None:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+    return case
 
 
 @app.get("/cases/{case_id}/outgoings")
