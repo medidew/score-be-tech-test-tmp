@@ -66,6 +66,31 @@ def test_region_without_ons_data_returns_422(api, monkeypatch):
     assert response.status_code == 422
 
 
+@pytest.mark.parametrize("lookup_region,ons_region", [
+    ("East of England", "East"),
+    ("Yorkshire and The Humber", "Yorkshire and the Humber"),
+])
+def test_postcode_region_alias_returns_matching_ons_estimates(api, monkeypatch, lookup_region, ons_region):
+    main, client = api
+    monkeypatch.setattr(main, "postcode_to_region", lambda postcode: lookup_region)
+    response = client.get(f"/cases/{SAMPLE_ID}/outgoings")
+    assert response.status_code == 200
+    assert response.json()["outgoings_food"] is not None
+
+    monkeypatch.setattr(main, "postcode_to_region", lambda postcode: ons_region)
+    canonical_response = client.get(f"/cases/{SAMPLE_ID}/outgoings")
+    assert canonical_response.status_code == 200
+    assert response.json() == canonical_response.json()
+
+
+def test_unresolved_postcode_returns_validation_error(api, monkeypatch):
+    main, client = api
+    monkeypatch.setattr(main, "postcode_to_region", lambda postcode: None)
+    response = client.get(f"/cases/{SAMPLE_ID}/outgoings")
+    assert response.status_code == 422
+    assert response.json()["detail"] == "Client postcode could not be resolved"
+
+
 def test_repeated_postcode_needs_only_one_lookup(api, monkeypatch):
     main, _ = api
     requests = []

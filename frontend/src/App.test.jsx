@@ -3,42 +3,75 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
 import App from './App.js';
 
-afterEach(() => {
-  cleanup();
-  vi.unstubAllGlobals();
-  window.history.replaceState({}, '', '/');
-});
+const caseData = {
+  case_id: 'case-123',
+  clients: [{
+    client_id: 'client-1',
+    details: {
+      first_name: 'Test', last_name: 'Applicant', dob: '1990/08/11',
+      employment_status: 'EMPLOYED', dependents: 0,
+      address: { address1: '1 Test Street', posttown: 'London', postcode: 'E1 7EE' },
+    },
+  }],
+};
 
-it('opens case outgoings from the shared case list', async () => {
-  window.history.replaceState({}, '', '/');
+function mockApi({ outgoingsError = false, empty = false } = {}) {
   vi.stubGlobal('fetch', vi.fn(async (url) => {
-    if (url === '/api/cases') {
-      return {
-        ok: true,
-        json: async () => [{
-          case_id: 'case-123',
-          clients: [{ details: { first_name: 'Test', last_name: 'Applicant' } }],
-        }],
-      };
-    }
+    if (url === '/api/cases') return { ok: true, json: async () => empty ? [] : [caseData] };
+    if (url === '/api/cases/case-123') return { ok: true, json: async () => caseData };
     if (url === '/api/cases/case-123/outgoings') {
+      if (outgoingsError) return { ok: false, status: 503, json: async () => ({ detail: 'Postcode lookup service unavailable' }) };
       return {
         ok: true,
         json: async () => ({
-          outgoings_food: 42.5,
-          outgoings_child_care: null,
+          outgoings_food: 42.5, outgoings_clothing: 0, outgoings_child_care: null,
           outgoings_additional_details: 'Regional estimate only.',
         }),
       };
     }
     throw new Error(`Unexpected request: ${url}`);
   }));
+}
 
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+  window.history.replaceState({}, '', '/');
+});
+
+it('opens complete case details and outgoings from a case card', async () => {
+  window.history.replaceState({}, '', '/');
+  mockApi();
   render(<App />);
-  fireEvent.click(await screen.findByRole('link', { name: 'case-123' }));
+  const card = await screen.findByRole('link', { name: 'View case case-123' });
+  expect(card.textContent).toContain('Test Applicant');
+  expect(card.textContent).toContain('E1 7EE');
+  expect(card.textContent).toContain('Dependents: 0');
+  fireEvent.click(card);
 
   expect(await screen.findByText('£42.50')).toBeTruthy();
+  expect(screen.getByText('£0.00')).toBeTruthy();
   expect(screen.getByText('Not available')).toBeTruthy();
-  expect(screen.getByRole('heading', { name: 'Case details' })).toBeTruthy();
+  expect(await screen.findByText('1 Test Street, London, E1 7EE')).toBeTruthy();
+  expect(screen.getByText('1990/08/11')).toBeTruthy();
+  expect(screen.getByRole('heading', { name: 'Test Applicant' })).toBeTruthy();
   expect(screen.getByRole('link', { name: 'Score' })).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Assumptions and data limitations' }));
+  expect(await screen.findByText('Regional estimate only.')).toBeTruthy();
+});
+
+it('loads a direct case URL and keeps applicant details visible when outgoings fail', async () => {
+  window.history.replaceState({}, '', '/cases/case-123');
+  mockApi({ outgoingsError: true });
+  render(<App />);
+  expect(await screen.findByText('1 Test Street, London, E1 7EE')).toBeTruthy();
+  expect(await screen.findByText('Postcode lookup service unavailable')).toBeTruthy();
+  expect(screen.getByRole('heading', { name: 'Test Applicant' })).toBeTruthy();
+});
+
+it('shows an empty state when no cases exist', async () => {
+  window.history.replaceState({}, '', '/');
+  mockApi({ empty: true });
+  render(<App />);
+  expect(await screen.findByText('No cases available.')).toBeTruthy();
 });

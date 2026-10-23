@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { API_URL } from '../api.js';
 
 const errorMessages = {
   404: 'Case not found.',
@@ -19,7 +20,7 @@ export default function useOutgoings(caseId) {
     async function fetchOutgoings() {
       try {
         const response = await fetch(
-          `/api/cases/${encodeURIComponent(caseId)}/outgoings`,
+          `${API_URL}/cases/${encodeURIComponent(caseId)}/outgoings`,
           { signal: controller.signal },
         );
 
