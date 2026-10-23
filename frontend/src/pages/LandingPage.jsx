@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
 function summarise(c) {
   const clients = c.clients ?? [];
@@ -14,7 +15,7 @@ function summarise(c) {
   };
 }
 
-export default function App() {
+export default function LandingPage() {
   const [cases, setCases] = useState(null);
   const [error, setError] = useState(null);
 
@@ -31,7 +32,7 @@ export default function App() {
   const cell = { border: "1px solid #ccc", padding: "6px 10px", textAlign: "left" };
 
   return (
-    <main style={{ fontFamily: "sans-serif", maxWidth: 960, margin: "2rem auto" }}>
+    <section style={{ fontFamily: "sans-serif", maxWidth: 960, margin: "2rem auto" }}>
       <h1>Cases</h1>
       {error && <p role="alert" style={{ color: "crimson" }}>{error}</p>}
       {!cases && !error && <p>Loading...</p>}
@@ -52,7 +53,7 @@ export default function App() {
               const s = summarise(c);
               return (
                 <tr key={c.case_id}>
-                  <td style={cell}>{c.case_id}</td>
+                  <td style={cell}><Link to={`/cases/${encodeURIComponent(c.case_id)}`}>{c.case_id}</Link></td>
                   <td style={cell}>{s.count}</td>
                   <td style={cell}>{s.names}</td>
                   <td style={cell}>{s.postcodes}</td>
@@ -64,6 +65,6 @@ export default function App() {
           </tbody>
         </table>
       )}
-    </main>
+    </section>
   );
 }
